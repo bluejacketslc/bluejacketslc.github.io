@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../assets/img/favicon.ico">
+    <title>Bluejacket SLC</title>
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i"
+        rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="../assets/css/mediumish.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Begin Nav
+================================================== -->
+    <nav class="navbar navbar-toggleable-md navbar-light bg-white fixed-top mediumnavigation">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="container">
+            <!-- Begin Logo -->
+            <a class="navbar-brand" href="../index.html">
+                <img src="../assets/img/logo.png" alt="logo">
+            </a>
+            <!-- End Logo -->
+
+        </div>
+    </nav>
+    <!-- End Nav
+================================================== -->
+
+    <!-- Begin Article
+================================================== -->
+    <div class="container">
+        <div class="row">
+
+            <!-- Begin Fixed Left Share -->
+            <div class="col-md-2 col-xs-12">
+                <div class="share">
+
+                </div>
+            </div>
+            <!-- End Fixed Left Share -->
+
+            <!-- Begin Post -->
+            <div class="col-md-8 col-md-offset-2 col-xs-12">
+                <div class="mainheading">
+
+                    <!-- Begin Top Meta -->
+                    <div class="row post-top-meta">
+                        <div class="col-md-2">
+                            <a><img class="author-thumb" src="../assets/img/logo.png" alt="Sal"></a>
+                        </div>
+                        <div class="col-md-10">
+                            <a class="link-dark">JX19-2</a>
+                            <br />
+                            <span class="post-date">31 March 2020</span><span class="dot"></span><span
+                                class="post-read">45 min read</span>
+                            <a href="https://drive.google.com/open?id=1hODJPjDjpAOaMp7bq-4v0DViGmS_c4h_"
+                                class="btn follow">Download Template</a>
+                        </div>
+                    </div>
+                    <!-- End Top Menta -->
+
+                    <h1 class="posttitle">PSD - Handler</h1>
+
+                </div>
+
+                <!-- Begin Featured Image -->
+                <img class="featured-image img-fluid" src="../assets/img/psd/pert7/logo.png" alt="">
+                <!-- End Featured Image -->
+
+                <!-- Begin Post Content -->
+                <div class="article-post">
+                    <p style="text-align: justify;">
+                        Di pertemuan ini kita akan melanjutkan pelajaran mengenai Domain
+                        Driven Design. Layer Domain Driven Design yang akan kita pelajari
+                        selanjutnya adalah Handler. Layer handler adalah layer yang
+                        berfungsi menjembatani controller dengan repository. Kenapa kita
+                        perlu layer handler ? kenapa tidak langsung dari controller memanggil
+                        repository ? anggapannya begini, misalnya kita mempunyai sebuah
+                        sistem dimana user dapat membeli item yang mereka mau. Ketika user
+                        membeli maka sistem akan berinteraksi dengan table transaksi
+                        (transaction table) dan sekaligus mengurangi stock di table item (item
+                        table). Jika tanpa layer handler maka kita akan memanggil 2
+                        repository, yaitu repository transaction dan repository item. Proses
+                        seperti ini bisa kita masukkan kedalam 1 handler agar memfokuskan
+                        satu logic ke dalam satu layer saja. Karena jika kita buat di controller,
+                        controller sendiri sudah memegang logic untuk menampilkan data ke
+                        view, sehingga tidak baik bila controller mengerjakan lagi hal yang
+                        berhubungan dengan transaksi. Jika ini terjadi maka kemungkinan
+                        maintenance akan sulit.
+                    </p>
+
+                    <blockquote>
+                        Untuk lebih jelas kita akan mencoba membuat codingan layer handler
+                        dimana tugasnya adalah untuk menghandle transaksi. <br />
+                        Notes: codingan disini menggunakan template yang sudah dishare.
+                        Terdapat juga hasil codingan yang telah dibuat, tetapi disarankan
+                        untuk dicoba juga sendiri menggunakan template yang diberikan dan
+                        tutorial code dibawah ini.
+                    </blockquote>
+
+                    <p style="text-align: justify;">
+                        Yang harus kita lakukan pertama kali adalah membukan file .sln nya
+                        dulu atau bisa open project lewat Visual Studio 2015 – nya.
+                        Setelah itu kita ke menu Server Explorer. Dimenu tersebut kita buat 2
+                        table, yaitu table TransactionHeader dan table TransactionDetail.
+                    </p>
+
+                    <img class="featured-image img-fluid" src="../assets/img/psd/pert7/step_1.png" alt="">
+                    <img class="featured-image img-fluid" src="../assets/img/psd/pert7/step_2.png" alt="">
+
+                    <p style="text-align: justify;">
+                        Table TransactionHeader Attribute <br />
+                        1. Id int | auto increment | primary key <br />
+                        2. UserId int <br />
+                        3. TransactionDate date <br />
+                    </p>
+
+                    <p style="text-align: justify;">
+                        Table TransactionDetil Attribute<br />
+                        1. HeaderId int | primary key | foreign key<br />
+                        2. ProductId int | primary key | foreign key<br />
+                        3. Quantity int<br />
+                    </p>
+
+                    <p style="text-align: justify;">
+                        Kemudian jangan lupa untuk update modelnya.
+                    </p>
+                    <img class="featured-image img-fluid" src="../assets/img/psd/pert7/step_3.png" alt="">
+                    <blockquote>
+                        Notes : model template sebelumnya ada model Product dan User. Jika
+                        diupdate akan muncul model TransactionHeader dan
+                        TransactionDetail berserta hubungan model – model tersebut.
+                    </blockquote>
+
+                    <p style="text-align: justify;">
+                        Selanjutnya kita buat repository untuk menghandle data transaksi kita
+                        dengan database. Kita namakan TransactionRepository.
+                    </p>
+                    <img class="featured-image img-fluid" src="../assets/img/psd/pert7/step_4.png" alt="">
+                    <p style="text-align: justify;">
+                        TransactionRepository akan memiliki dua function, yaitu
+                        AddTransactionHeader dan AddTransactionDetail. Kedua function
+                        tersebut digunakan untuk menginsert data kedalam table
+                        TransactionHeader dan TransactionDetail.
+                    </p>
+
+                    <p style="text-align: justify;">
+                        Kemudian kita buat factory untuk menghandle proses pembuatan object
+                        transaction nantinya. Kita namakan TransactionFactory.
+                    </p>
+
+                    <img class="featured-image img-fluid" src="../assets/img/psd/pert7/step_5.png" alt="">
+
+                    <p style="text-align: justify;">
+                        Masih ingat fungsi dari factory ? fungsi dari factory adalah untuk
+                        membungkus proses pembuatan object kita, tujuannya adalah agar
+                        proses pembuatan object yang kompleks tidak dibuat dalam file
+                        codingan yang sama, jika hal tersebut dilakukan, maka kemungkinan
+                        maintenance akan sulit.
+                    </p>
+
+                    <p style="text-align: justify;">
+                        TransactionFactory akan memiliki dua function juga, yaitu CreateHeader
+                        dan CreateDetail. Kedua function tersebut digunakan untuk membuat
+                        object transaction dan mengembalikan hasil buatannya.
+                    </p>
+
+                    <p style="text-align: justify;">
+                        Selanjutnya diikuti dengan membuat handler, dimana handler ini akan
+                        berfungsi sebagai jembatan antara controller dan repository sekaligus
+                        mengatur logic transaksi yang akan terjadi (pada kasus ini adalah
+                        insert transaction). Kita namakan TransactionHandler.
+                    </p>
+                    <img class="featured-image img-fluid" src="../assets/img/psd/pert7/step_6.png" alt="">
+
+                    <p style="text-align: justify;">
+                        Di TransactionHandler akan kita buat 1 function saja, misalnya
+                        CheckOut. Dimana function CheckOut akan digunakan untuk
+                        menghandle proses insert header dan detail dari sebuah transaksi yang
+                        terjadi. Disini function CheckOut memanggil CreateHeader dan
+                        CreateDetail dari layer Factoty kemudian AddTransactionHeader dan
+                        AddTransactionDetail dari layer repository.
+                    </p>
+                    <blockquote>
+                        Notes: Function CheckOut akan dipanggil ketika user sudah memilih
+                        barang dan melakukan check out.
+                    </blockquote>
+                    <p style="text-align: justify;">
+                        Terakhir kita lanjutkan dengan membuat controller (untuk yang ini
+                        optional dikarenakan di aspx sendiri sudah mengenerate 2 file ketika
+                        kita buat formnya, yaitu .aspx (sebagai layer View) dan .aspx.cs
+                        (sebagai layer Controller)). Kita namakan TransactionController.
+                    </p>
+                    <img class="featured-image img-fluid" src="../assets/img/psd/pert7/step_7.png" alt="">
+                    <p style="text-align: justify;">
+                        Di TransactionController cuman dibuat 1 function yang berfungsi untuk
+                        memanggil sih function CheckOut dari layer handler.
+                    </p>
+                    <blockquote>
+                        Notes: biasanya nama function kita samain biar tidak sudah
+                        dimengerti oleh manusia ketika dibaca.
+                    </blockquote>
+
+                    <p style="text-align: justify;">
+                        Setelah logic pada layer factory, repository, handler , dan controller
+                        selesai, kita pindah ke Default.aspx.cs.
+                    </p>
+
+                    <img class="featured-image img-fluid" src="../assets/img/psd/pert7/step_8.png" alt="">
+
+                    <p style="text-align: justify;">
+                        Pada Default.aspx.cs kita tambahkan beberapa line code di function
+                        btnCheckOut_Click seperti gambar diatas. <br />
+                        Disini kita akan meretrive 2 nilai dari inputan user (ProductID dan
+                        Quantity) dan satu nilai dari session hasil login user (UserID). <br />Kemudian kita tinggal
+                        panggil function CheckOut dari layer controller.
+                        Kita lanjutkan dengan testing sistemnya. F5 saja dari Login.aspx.
+                    </p>
+                    <img class="featured-image img-fluid" src="../assets/img/psd/pert7/step_9.png" alt="">
+                    <blockquote>
+                        Masukan username dan password, kemudian tekan Login. <br />
+                        Notes: username : admin dan password : admin.
+                    </blockquote>
+                    <p style="text-align: justify;">
+                        Nantinya bakal muncul tampilan seperti gambar dibawah.
+                    </p>
+                    <img class="featured-image img-fluid" src="../assets/img/psd/pert7/step_10.png" alt="">
+
+                    <p style="text-align: justify;">
+                        Fieldnya terdiri dari ProductId, ProductName, ProductPrice, dan
+                        Quantity. <br />
+                        Kemudian select salah satu product (yang diselect digambar adalah
+                        product 1). Nanti bakal auto fill ke fieldnya untuk ProductId,
+                        ProductName, dan ProductPrice. <br />
+                        Selanjutnya masukin quantity yang kita mau, misalnya 100 lalu tekan
+                        Check Out.
+                    </p>
+                    <img class="featured-image img-fluid" src="../assets/img/psd/pert7/step_11.png" alt="">
+                    <blockquote>
+                        Notes: Jika tombol Check Out ditekan function btnCheckOut_Click
+                        akan dijalankan beserta logic yang ada didalamnya.
+                    </blockquote>
+                    <p style="text-align: justify;">
+                        Jika sudah tinggal cek isi dari table TransactionHeader dan
+                        TransactionDetail kita.
+                    </p>
+                    <img class="featured-image img-fluid" src="../assets/img/psd/pert7/step_12.png" alt="">
+
+                    <img class="featured-image img-fluid" src="../assets/img/psd/pert7/step13.png" alt="">
+                    <p style="text-align: justify;">
+                        Dan hasilnya transaksinya sudah ada didalam table
+                        TransactionHeader dan TransactionDetail. <br />
+                        Untuk materi mengenai handler sampai disini saja. Untuk lebih jelas
+                        kalian bisa baca HOL yang sudah dishare juga. CTRL + F, ketik
+                        handler, dan tekan enter 4x, nanti bakal di direct ke topic mengenai
+                        handler.
+                    </p>
+                    <blockquote>
+                        Notes: Diturorial ini hanya mencontohkan satu TransactionHeader
+                        memiliki satu TransactionDetail, kalau di HOL contohnya satu
+                        TransactionHeader memiliki banyak TransactionDetail (sistem cart).
+                    </blockquote>
+                    <p style="text-align: justify;">
+                        Jika ada yang ingin ditanyakan bisa hubungi aslabnya masing –
+                        masing. Thank You.
+                    </p>
+
+                </div>
+                <!-- End Post Content -->
+
+            </div>
+            <!-- End Post -->
+
+        </div>
+    </div>
+    <!-- End Article
+================================================== -->
+
+    <div class="hideshare"></div>
+
+    <!-- Begin Related
+================================================== -->
+    <div class="graybg">
+        <div class="container">
+            <div class="row listrecent listrelated">
+
+                <!-- begin post -->
+                <!-- <div class="col-md-4">
+				<div class="card">
+					<a href="post.html">
+					<img class="img-fluid img-thumb" src="assets/img/demopic/9.jpg" alt="">
+					</a>
+					<div class="card-block">
+						<h2 class="card-title"><a href="post.html">Best recreational places to visit on a holiday</a></h2>
+						<div class="metafooter">
+							<div class="wrapfooter">
+								<span class="meta-footer-thumb">
+								<a href="author.html"><img class="author-thumb" src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x" alt="Sal"></a>
+								</span>
+								<span class="author-meta">
+								<span class="post-name"><a href="author.html">Sal</a></span><br/>
+								<span class="post-date">22 July 2017</span><span class="dot"></span><span class="post-read">6 min read</span>
+								</span>
+								<span class="post-read-more"><a href="post.html" title="Read Story"><svg class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z" fill-rule="evenodd"></path></svg></a></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> -->
+                <!-- end post -->
+
+                <!-- begin post -->
+                <!-- <div class="col-md-4">
+				<div class="card">
+					<a href="post.html">
+					<img class="img-fluid img-thumb" src="assets/img/demopic/8.jpg" alt="">
+					</a>
+					<div class="card-block">
+						<h2 class="card-title"><a href="post.html">How travelling can change your life</a></h2>
+						<div class="metafooter">
+							<div class="wrapfooter">
+								<span class="meta-footer-thumb">
+								<a href="author.html"><img class="author-thumb" src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x" alt="Sal"></a>
+								</span>
+								<span class="author-meta">
+								<span class="post-name"><a href="author.html">Sal</a></span><br/>
+								<span class="post-date">22 July 2017</span><span class="dot"></span><span class="post-read">6 min read</span>
+								</span>
+								<span class="post-read-more"><a href="post.html" title="Read Story"><svg class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z" fill-rule="evenodd"></path></svg></a></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> -->
+                <!-- end post -->
+
+                <!-- begin post -->
+                <!-- <div class="col-md-4">
+				<div class="card">
+					<a href="post.html">
+					<img class="img-fluid img-thumb" src="assets/img/demopic/7.jpg" alt="">
+					</a>
+					<div class="card-block">
+						<h2 class="card-title"><a href="post.html">Little red dress and a perfect summer</a></h2>
+						<div class="metafooter">
+							<div class="wrapfooter">
+								<span class="meta-footer-thumb">
+								<a href="author.html"><img class="author-thumb" src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x" alt="Sal"></a>
+								</span>
+								<span class="author-meta">
+								<span class="post-name"><a href="author.html">Sal</a></span><br/>
+								<span class="post-date">22 July 2017</span><span class="dot"></span><span class="post-read">6 min read</span>
+								</span>
+								<span class="post-read-more"><a href="post.html" title="Read Story"><svg class="svgIcon-use" width="25" height="25" viewbox="0 0 25 25"><path d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z" fill-rule="evenodd"></path></svg></a></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> -->
+                <!-- end post -->
+
+            </div>
+        </div>
+    </div>
+    <!-- End Related Posts
+================================================== -->
+
+    <!-- Begin Twitter Timeline
+================================================== -->
+    <!-- <div class="container margtop3rem">
+<a class="twitter-grid" href="https://twitter.com/TwitterDev/timelines/539487832448843776">WowThemesNet Tweets</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div> -->
+    <!-- End Twitter Timeline
+================================================== -->
+
+    <!-- Begin AlertBar
+================================================== -->
+    <!-- <div class="alertbar">
+	<div class="container text-center">
+		<img src="assets/img/logo.png" alt=""> &nbsp; Never miss a <b>story</b> from us, get weekly updates in your inbox. <a href="#" class="btn subscribe">Get Updates</a>
+	</div>
+</div> -->
+    <!-- End AlertBar
+================================================== -->
+
+    <!-- Begin Footer
+================================================== -->
+    <div class="container">
+        <div class="footer">
+            <p class="pull-left">
+                Copyright &copy; 2020 bluejacketslc.github.io
+            </p>
+            <p class="pull-right">
+                Mediumish Theme by <a target="_blank" href="https://www.wowthemes.net">WowThemes.net</a>
+            </p>
+            <div class="clearfix">
+            </div>
+        </div>
+    </div>
+    <!-- End Footer
+================================================== -->
+
+    <!-- Bootstrap core JavaScript
+================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
+    <script src="../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="../assets/js/mediumish.js"></script>
+</body>
+
+</html>
